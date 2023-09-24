@@ -7,5 +7,5 @@
 	"editor.insertSpaces": false,
 	// miscelaneous
 	"diffEditor.ignoreTrimWhitespace": false,
-	"aws.telemetry": false,
-  }
+	"aws.telemetry": false
+}
