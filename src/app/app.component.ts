@@ -6,20 +6,29 @@ import {
 	ViewChild,
 	afterNextRender,
 	inject,
+	ChangeDetectionStrategy,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { initFlowbite, Carousel, CarouselItem, CarouselOptions, CarouselInterface } from 'flowbite';
 
 @Component({
 	selector: 'param-root',
 	standalone: true,
-	imports: [CommonModule, RouterOutlet],
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	templateUrl: './app.component.html',
 	styleUrls: ['./app.component.scss'],
+	imports: [CommonModule, RouterOutlet, NgOptimizedImage],
 })
 export class AppComponent implements OnInit {
 	title = 'param-chat';
+
+	images = [
+		'assets/images/img-1.jpg',
+		'assets/images/img-2.jpg',
+		'assets/images/img-3.jpg',
+		'assets/images/img-4.jpg',
+	];
 
 	@ViewChild('carouselItem1') carouselItem1!: ElementRef;
 	@ViewChild('carouselItem2') carouselItem2!: ElementRef;
@@ -41,19 +50,19 @@ export class AppComponent implements OnInit {
 			const items: CarouselItem[] = [
 				{
 					position: 0,
-					el: this.carouselItem1.nativeElement,
+					el: this.carouselItem1.nativeElement as HTMLElement,
 				},
 				{
 					position: 1,
-					el: this.carouselItem2.nativeElement,
+					el: this.carouselItem2.nativeElement as HTMLElement,
 				},
 				{
 					position: 2,
-					el: this.carouselItem3.nativeElement,
+					el: this.carouselItem3.nativeElement as HTMLElement,
 				},
 				{
 					position: 3,
-					el: this.carouselItem4.nativeElement,
+					el: this.carouselItem4.nativeElement as HTMLElement,
 				},
 			];
 
@@ -68,19 +77,19 @@ export class AppComponent implements OnInit {
 					items: [
 						{
 							position: 0,
-							el: this.carouselIndicator1.nativeElement,
+							el: this.carouselIndicator1.nativeElement as HTMLElement,
 						},
 						{
 							position: 1,
-							el: this.carouselIndicator2.nativeElement,
+							el: this.carouselIndicator2.nativeElement as HTMLElement,
 						},
 						{
 							position: 2,
-							el: this.carouselIndicator3.nativeElement,
+							el: this.carouselIndicator3.nativeElement as HTMLElement,
 						},
 						{
 							position: 3,
-							el: this.carouselIndicator4.nativeElement,
+							el: this.carouselIndicator4.nativeElement as HTMLElement,
 						},
 					],
 				},
