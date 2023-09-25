@@ -10,6 +10,7 @@
 				"plugin:@typescript-eslint/stylistic-type-checked",
 				"plugin:@angular-eslint/all",
 				"plugin:@angular-eslint/template/process-inline-templates",
+				"plugin:rxjs/recommended",
 				"plugin:prettier/recommended"
 			],
 			"parserOptions": {
@@ -43,7 +44,6 @@
 			],
 			"rules": {
 				"prettier/prettier": ["error", { "parser": "angular" }],
-				// eslint off @angular-eslint/template/i18n:
 				"@angular-eslint/template/i18n": "off"
 			}
 		}
