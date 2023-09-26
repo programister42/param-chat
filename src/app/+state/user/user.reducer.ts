@@ -1,5 +1,7 @@
 import { isDevMode } from '@angular/core';
+
 import { createFeature, createReducer, MetaReducer, on } from '@ngrx/store';
+
 import { User } from './user.interface';
 import { userActions } from './user.actions';
 
