@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "param-chat-2": {
+      "hosting": {
+        "param-chat": [
+          "param-chat-2"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "param-chat-2"
+  }
+}
