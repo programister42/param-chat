@@ -16,4 +16,4 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_PARAM_CHAT_2 }}'
           projectId: param-chat-2
         env:
-          FIREBASE_CLI_EXPERIMENTS: webframeworks-next
+          FIREBASE_CLI_EXPERIMENTS: webframeworks-next,webframeworks
