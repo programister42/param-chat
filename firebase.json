@@ -1,0 +1,9 @@
+{
+  "hosting": [
+    {
+      "target": "param-chat",
+      "source": ".",
+      "frameworksBackend": {}
+    }
+  ]
+}
