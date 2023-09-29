@@ -20,6 +20,7 @@ import { provideStorage, getStorage } from '@angular/fire/storage';
 import { provideState, provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideRouterStore } from '@ngrx/router-store';
+import { provideEffects } from '@ngrx/effects';
 
 import { environment } from '../environments/environment';
 import { routes } from './app.routes';
@@ -32,6 +33,7 @@ export const appConfig: ApplicationConfig = {
 		provideState(userFeature),
 		provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
 		provideRouterStore(),
+		provideEffects(),
 		importProvidersFrom([
 			provideFirebaseApp(() => initializeApp(environment.firebase)),
 			provideAnalytics(() => getAnalytics()),
