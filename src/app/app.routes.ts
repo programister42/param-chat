@@ -1,22 +1,44 @@
-import { ActivatedRouteSnapshot, Routes, createUrlTreeFromSnapshot } from '@angular/router';
+import { inject } from '@angular/core';
+import { Routes } from '@angular/router';
 
-export enum AppRoutes {
-	BASE = '',
-	AUTH = 'auth',
-}
+import { map } from 'rxjs';
+
+import { UserFacadeService } from './+state/user/services/user.facade.service';
+import { AppNavigationService } from './services/app-navigation.service';
 
 export const routes: Routes = [
 	{
-		path: AppRoutes.BASE,
+		path: '',
 		pathMatch: 'full',
 		loadChildren: () => import('./pages/home/home.routes'),
 		canActivate: [
-			(route: ActivatedRouteSnapshot) => createUrlTreeFromSnapshot(route, ['auth']),
+			() => {
+				const userFacadeService = inject(UserFacadeService);
+				const appNavigationService = inject(AppNavigationService);
+				return userFacadeService.isAuthenticated$.pipe(
+					map(
+						(isAuthenticated) =>
+							isAuthenticated || appNavigationService.authPageUrlTree,
+					),
+				);
+			},
 		],
 	},
 	{
-		path: AppRoutes.AUTH,
+		path: 'auth',
 		loadChildren: () => import('./pages/auth/auth.routes'),
+		canActivate: [
+			() => {
+				const userFacadeService = inject(UserFacadeService);
+				const appNavigationService = inject(AppNavigationService);
+				return userFacadeService.isAuthenticated$.pipe(
+					map(
+						(isAuthenticated) =>
+							!isAuthenticated || appNavigationService.homePageUrlTree,
+					),
+				);
+			},
+		],
 	},
 	{
 		path: '**',
