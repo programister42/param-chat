@@ -1,0 +1,248 @@
+<section class="bg-gray-50 dark:bg-gray-900">
+	<div
+		class="flex flex-col items-center justify-center px-6 py-8 mx-auto h-screen overflow-auto lg:py-0"
+	>
+		<a class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+			<img
+				class="w-8 h-8 mr-2"
+				width="32"
+				height="33"
+				ngSrc="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
+				alt="logo"
+			/>
+			ParamChat
+		</a>
+		<div
+			class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700"
+		>
+			<div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+				<h1
+					class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white"
+				>
+					Create an account
+				</h1>
+				<form
+					class="space-y-4 md:space-y-6"
+					[formGroup]="registerForm"
+					(ngSubmit)="onSubmit()"
+				>
+					<div>
+						<label
+							for="email"
+							class="block mb-2 text-sm font-medium"
+							[ngClass]="
+								registerForm.get('email')?.dirty &&
+								registerForm.get('email')?.touched &&
+								registerForm.get('email')?.invalid
+									? 'text-red-700 dark:text-red-500'
+									: 'text-gray-900 dark:text-white'
+							"
+							>Your email</label
+						>
+						<input
+							type="email"
+							name="email"
+							id="email"
+							placeholder="name@company.com"
+							formControlName="email"
+							class="border sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700"
+							[ngClass]="
+								registerForm.get('email')?.dirty &&
+								registerForm.get('email')?.touched &&
+								registerForm.get('email')?.invalid
+									? 'bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500'
+									: 'bg-gray-50 border-gray-300 text-gray-900 focus:ring-primary-600 focus:border-primary-600 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+							"
+							[paramInvalidPopover]="emailInvalidPopover"
+						/>
+						<div
+							#emailInvalidPopover
+							data-popover
+							id="popover-email-invalid"
+							role="tooltip"
+							class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800"
+						>
+							<div
+								class="px-3 py-2 bg-gray-100 border-b border-gray-200 rounded-t-lg dark:border-gray-600 dark:bg-gray-700"
+							>
+								<h3 class="font-semibold text-gray-900 dark:text-white">Hint</h3>
+							</div>
+							<div class="px-3 py-2">
+								<p *ngIf="registerForm.get('email')?.errors?.['required']">
+									Email is required
+								</p>
+								<p *ngIf="registerForm.get('email')?.errors?.['email']">
+									Email must be a valid email address
+								</p>
+							</div>
+							<div data-popper-arrow></div>
+						</div>
+					</div>
+					<param-password-input
+						passwordLabel="Password"
+						passwordConfirmationLabel="Confirm password"
+						formControlName="password"
+						[isConfirmationRequired]="true"
+					/>
+					<div class="flex items-start">
+						<div class="flex items-center h-5">
+							<input
+								id="terms"
+								aria-describedby="terms"
+								type="checkbox"
+								class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
+								formControlName="terms"
+							/>
+						</div>
+						<div class="ml-3 text-sm">
+							<label
+								for="terms"
+								class="font-light text-gray-500 dark:text-gray-300"
+								>I accept the
+							</label>
+							<a
+								data-modal-target="defaultModal"
+								data-modal-toggle="defaultModal"
+								class="font-medium text-primary-600 cursor-pointer hover:underline dark:text-primary-500"
+								>Terms and Conditions</a
+							>
+						</div>
+					</div>
+					<button
+						type="submit"
+						class="w-full text-white bg-primary-600 disabled:bg-blue-400 hover:bg-primary-700 disabled:hover:bg-blue-400 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 disabled:dark:bg-blue-500 dark:hover:bg-primary-700 disabled:hover:dark:bg-blue-500 dark:focus:ring-primary-800 disabled:cursor-not-allowed"
+						[disabled]="registerForm.invalid || (isLoading$ | async)"
+					>
+						<svg
+							*ngIf="isLoading$ | async"
+							aria-hidden="true"
+							role="status"
+							class="inline w-4 h-4 mr-3 text-white animate-spin"
+							viewBox="0 0 100 101"
+							fill="none"
+							xmlns="http://www.w3.org/2000/svg"
+						>
+							<path
+								d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+								fill="#E5E7EB"
+							/>
+							<path
+								d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+								fill="currentColor"
+							/>
+						</svg>
+						Create an account
+					</button>
+					<p class="text-sm font-light text-gray-500 dark:text-gray-400">
+						Already have an account?
+						<a
+							class="font-medium text-primary-600 hover:underline dark:text-primary-500"
+							[routerLink]="['../login']"
+							>Login here</a
+						>
+					</p>
+				</form>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- Main modal -->
+<div
+	id="defaultModal"
+	tabindex="-1"
+	aria-hidden="true"
+	class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
+>
+	<div class="relative w-full max-w-2xl max-h-full">
+		<!-- Modal content -->
+		<div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+			<!-- Modal header -->
+			<div
+				class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600"
+			>
+				<h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+					Terms of Service
+				</h3>
+				<button
+					type="button"
+					class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+					data-modal-hide="defaultModal"
+				>
+					<svg
+						class="w-3 h-3"
+						aria-hidden="true"
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 14 14"
+					>
+						<path
+							stroke="currentColor"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+						/>
+					</svg>
+					<span class="sr-only">Close modal</span>
+				</button>
+			</div>
+			<!-- Modal body -->
+			<div class="p-6 space-y-6">
+				<p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+					By using ParamChat, you agree to the following terms and conditions:
+				</p>
+				<ul
+					class="list-disc list-inside text-base leading-relaxed text-gray-500 dark:text-gray-400"
+				>
+					<li>You must be 13 years of age or older to use ParamChat.</li>
+					<li>
+						You must not use ParamChat to send or receive any illegal, harmful, or
+						offensive content.
+					</li>
+					<li>You must not impersonate any other person or entity.</li>
+					<li>
+						You must not interfere with the operation of ParamChat or the enjoyment of
+						other users.
+					</li>
+					<li>
+						You must not collect or store personal information about other users without
+						their consent.
+					</li>
+				</ul>
+				<p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+					ParamChat reserves the right to terminate your account or access to the app for
+					any reason, including but not limited to violation of these terms and
+					conditions.
+				</p>
+				<p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+					ParamChat does not guarantee the availability or performance of the app.
+					ParamChat is not responsible for any damages caused by your use of the app.
+				</p>
+				<p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+					Be a good person and enjoy using ParamChat :)
+				</p>
+			</div>
+			<!-- Modal footer -->
+			<div
+				class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600"
+			>
+				<button
+					data-modal-hide="defaultModal"
+					type="button"
+					class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+					(click)="onClickAcceptTermsButton()"
+				>
+					I accept
+				</button>
+				<button
+					data-modal-hide="defaultModal"
+					type="button"
+					class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+				>
+					Decline
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
