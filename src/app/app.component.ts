@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 
 import { initFlowbite } from 'flowbite';
+import { inject } from '@vercel/analytics';
 
 @Component({
 	selector: 'param-root',
@@ -12,9 +13,9 @@ import { initFlowbite } from 'flowbite';
 	styleUrls: ['./app.component.scss'],
 	imports: [CommonModule, RouterOutlet],
 })
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class AppComponent implements OnInit {
 	ngOnInit(): void {
 		initFlowbite();
+		inject();
 	}
 }

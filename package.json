@@ -26,6 +26,7 @@
 		"@ngrx/store": "^16.2.0",
 		"@ngrx/store-devtools": "^16.2.0",
 		"@supabase/supabase-js": "^2.38.0",
+		"@vercel/analytics": "^1.1.0",
 		"flowbite": "^1.8.1",
 		"rxjs": "~7.8.0",
 		"tslib": "^2.3.0",
