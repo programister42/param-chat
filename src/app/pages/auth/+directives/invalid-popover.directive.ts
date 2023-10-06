@@ -4,6 +4,7 @@ import {
 	ElementRef,
 	HostListener,
 	Input,
+	OnDestroy,
 	inject,
 } from '@angular/core';
 import { NgControl } from '@angular/forms';
@@ -14,7 +15,7 @@ import { Popover, PopoverInterface } from 'flowbite';
 	selector: '[paramInvalidPopover]',
 	standalone: true,
 })
-export class InvalidPopoverDirective implements AfterContentInit {
+export class InvalidPopoverDirective implements AfterContentInit, OnDestroy {
 	@Input({ required: true }) paramInvalidPopover!: HTMLElement;
 
 	private elementRef = inject<ElementRef<HTMLInputElement>>(ElementRef);
@@ -26,6 +27,10 @@ export class InvalidPopoverDirective implements AfterContentInit {
 		this.popover = new Popover(this.paramInvalidPopover, this.elementRef.nativeElement, {
 			triggerType: 'none',
 		});
+	}
+
+	ngOnDestroy(): void {
+		this.popover?.hide();
 	}
 
 	@HostListener('click')
