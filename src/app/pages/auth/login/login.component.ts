@@ -35,11 +35,6 @@ export class LoginComponent {
 	isLoading$ = this.userFacadeService.isLoading$;
 
 	onSubmit(): void {
-		// this.userFacadeService.login({
-		// 	email: this.loginForm.controls.email.value,
-		// 	password: this.loginForm.controls.password.value,
-		// });
-
 		this.userFacadeService.signIn({
 			email: this.loginForm.controls.email.value,
 			password: this.loginForm.controls.password.value,
