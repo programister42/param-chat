@@ -44,10 +44,12 @@ export class RegisterComponent implements OnDestroy {
 	isLoading$ = this.userFacadeService.isLoading$;
 
 	private termsModal: ModalInterface | undefined;
+	private emailConfirmationModal: ModalInterface | undefined;
 
 	constructor() {
 		afterNextRender(() => {
 			this.buildTermsModal();
+			this.buildEmailConfirmationModal();
 		});
 	}
 
@@ -74,11 +76,24 @@ export class RegisterComponent implements OnDestroy {
 			email: this.registerForm.controls.email.value,
 			password: this.registerForm.controls.password.value,
 		});
+		this.emailConfirmationModal?.show();
 	}
 
 	private buildTermsModal(): void {
 		const termsModalElement = document.querySelector('#termsModal');
 		this.termsModal = new Modal(termsModalElement as HTMLElement);
 	}
+
+	private buildEmailConfirmationModal(): void {
+		const emailConfirmationModalElement = document.querySelector('#emailConfirmationModal');
+		const emailConfirmationModalOptions: ModalOptions = {
+			placement: 'top-center',
+			backdrop: 'static',
+			closable: false,
+		};
+		this.emailConfirmationModal = new Modal(
+			emailConfirmationModalElement as HTMLElement,
+			emailConfirmationModalOptions,
+		);
 	}
 }
