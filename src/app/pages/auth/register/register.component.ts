@@ -1,4 +1,10 @@
-import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import {
+	Component,
+	ChangeDetectionStrategy,
+	inject,
+	afterNextRender,
+	OnDestroy,
+} from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -6,6 +12,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserFacadeService } from 'src/app/+state/user/services/user.facade.service';
 import { PasswordInputComponent } from '../+components/password-input/password-input.component';
 import { InvalidPopoverDirective } from '../+directives/invalid-popover.directive';
+import { Modal, ModalInterface, ModalOptions } from 'flowbite';
 
 @Component({
 	selector: 'param-register',
@@ -22,7 +29,7 @@ import { InvalidPopoverDirective } from '../+directives/invalid-popover.directiv
 	templateUrl: './register.component.html',
 	styleUrls: ['./register.component.scss'],
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnDestroy {
 	private formBuilder = inject(FormBuilder);
 	private userFacadeService = inject(UserFacadeService);
 
@@ -36,19 +43,42 @@ export class RegisterComponent {
 
 	isLoading$ = this.userFacadeService.isLoading$;
 
+	private termsModal: ModalInterface | undefined;
+
+	constructor() {
+		afterNextRender(() => {
+			this.buildTermsModal();
+		});
+	}
+
+	ngOnDestroy(): void {
+		this.termsModal?.hide();
+		this.emailConfirmationModal?.hide();
+	}
+
+	onClickTermsLink(): void {
+		this.termsModal?.show();
+	}
+
 	onClickAcceptTermsButton(): void {
 		this.registerForm.controls.terms.setValue(true);
+		this.termsModal?.hide();
+	}
+
+	onClickCloseTermsButton(): void {
+		this.termsModal?.hide();
 	}
 
 	onSubmit(): void {
-		// this.userFacadeService.register({
-		// 	email: this.registerForm.controls.email.value,
-		// 	password: this.registerForm.controls.password.value,
-		// });
-
 		this.userFacadeService.signUp({
 			email: this.registerForm.controls.email.value,
 			password: this.registerForm.controls.password.value,
 		});
+	}
+
+	private buildTermsModal(): void {
+		const termsModalElement = document.querySelector('#termsModal');
+		this.termsModal = new Modal(termsModalElement as HTMLElement);
+	}
 	}
 }
