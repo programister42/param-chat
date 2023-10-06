@@ -22,7 +22,7 @@
 			"prefix": "param",
 			"architect": {
 				"build": {
-					"builder": "@angular-devkit/build-angular:browser",
+					"builder": "@angular-devkit/build-angular:browser-esbuild",
 					"options": {
 						"outputPath": "dist/param-chat",
 						"index": "src/index.html",
@@ -32,7 +32,8 @@
 						"inlineStyleLanguage": "scss",
 						"assets": ["src/favicon.ico", "src/assets"],
 						"styles": ["src/styles.scss"],
-						"scripts": []
+						"scripts": [],
+						"allowedCommonJsDependencies": ["websocket", "@supabase/node-fetch"]
 					},
 					"configurations": {
 						"production": {
