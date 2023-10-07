@@ -9,10 +9,11 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
+import { Modal, ModalInterface, ModalOptions } from 'flowbite';
+
 import { UserFacadeService } from 'src/app/+state/user/services/user.facade.service';
 import { PasswordInputComponent } from '../+components/password-input/password-input.component';
 import { InvalidPopoverDirective } from '../+directives/invalid-popover.directive';
-import { Modal, ModalInterface, ModalOptions } from 'flowbite';
 
 @Component({
 	selector: 'param-register',
@@ -44,7 +45,7 @@ export class RegisterComponent implements OnDestroy {
 	isLoading$ = this.userFacadeService.isLoading$;
 
 	private termsModal: ModalInterface | undefined;
-	private emailConfirmationModal: ModalInterface | undefined;
+	private confirmationEmailModal: ModalInterface | undefined;
 
 	constructor() {
 		afterNextRender(() => {
@@ -55,7 +56,7 @@ export class RegisterComponent implements OnDestroy {
 
 	ngOnDestroy(): void {
 		this.termsModal?.hide();
-		this.emailConfirmationModal?.hide();
+		this.confirmationEmailModal?.hide();
 	}
 
 	onClickTermsLink(): void {
@@ -76,7 +77,7 @@ export class RegisterComponent implements OnDestroy {
 			email: this.registerForm.controls.email.value,
 			password: this.registerForm.controls.password.value,
 		});
-		this.emailConfirmationModal?.show();
+		this.confirmationEmailModal?.show();
 	}
 
 	private buildTermsModal(): void {
@@ -85,15 +86,15 @@ export class RegisterComponent implements OnDestroy {
 	}
 
 	private buildEmailConfirmationModal(): void {
-		const emailConfirmationModalElement = document.querySelector('#emailConfirmationModal');
-		const emailConfirmationModalOptions: ModalOptions = {
+		const confirmationEmailModalElement = document.querySelector('#confirmationEmailModal');
+		const confirmationEmailModalOptions: ModalOptions = {
 			placement: 'top-center',
 			backdrop: 'static',
 			closable: false,
 		};
-		this.emailConfirmationModal = new Modal(
-			emailConfirmationModalElement as HTMLElement,
-			emailConfirmationModalOptions,
+		this.confirmationEmailModal = new Modal(
+			confirmationEmailModalElement as HTMLElement,
+			confirmationEmailModalOptions,
 		);
 	}
 }

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, afterNextRender } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 
@@ -14,6 +14,12 @@ import { inject } from '@vercel/analytics';
 	imports: [CommonModule, RouterOutlet],
 })
 export class AppComponent implements OnInit {
+	constructor() {
+		afterNextRender(() => {
+			window.name = `param-chat-app`;
+		});
+	}
+
 	ngOnInit(): void {
 		initFlowbite();
 		inject();
