@@ -1,11 +1,6 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
-import {
-	SignInWithPasswordCredentials,
-	SignUpWithPasswordCredentials,
-	User,
-} from '@supabase/supabase-js';
-import { UserProfile } from './types/user-profile.interface';
+import { User } from '@supabase/supabase-js';
 
 export const userActions = createActionGroup({
 	source: 'User',
@@ -14,16 +9,24 @@ export const userActions = createActionGroup({
 		getUserSuccess: props<{ user: User | null }>(),
 		getUserFailure: props<{ error: unknown }>(),
 
-		signUp: props<SignUpWithPasswordCredentials>(),
-		signIn: props<SignInWithPasswordCredentials>(),
+		signUp: props<{ email: string; password: string }>(),
+		signUpSuccess: props<{ user: User | null }>(),
+		signUpFailure: props<{ error: unknown }>(),
+
+		signIn: props<{ email: string; password: string }>(),
+		signInSuccess: props<{ user: User }>(),
+		signInFailure: props<{ error: unknown }>(),
+
 		signOut: emptyProps(),
+		signOutSuccess: emptyProps(),
+		signOutFailure: props<{ error: unknown }>(),
 
-		getUserProfile: props<{ user: User }>(),
-		getUserProfileSuccess: props<{ userProfile: UserProfile }>(),
-		getUserProfileFailure: props<{ error: unknown }>(),
+		resetPassword: props<{ email: string }>(),
+		resetPasswordSuccess: emptyProps(),
+		resetPasswordFailure: props<{ error: unknown }>(),
 
-		updateUserProfile: props<{ userProfile: Partial<UserProfile> }>(),
-		updateUserProfileSuccess: props<{ userProfile: UserProfile }>(),
-		updateUserProfileFailure: props<{ error: unknown }>(),
+		changePassword: props<{ newPassword: string }>(),
+		changePasswordSuccess: props<{ user: User | null }>(),
+		changePasswordFailure: props<{ error: unknown }>(),
 	},
 });

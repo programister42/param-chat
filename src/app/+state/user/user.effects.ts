@@ -1,12 +1,10 @@
 import { inject } from '@angular/core';
 
-import { catchError, defer, exhaustMap, map, of, tap, withLatestFrom } from 'rxjs';
+import { catchError, defer, exhaustMap, map, of } from 'rxjs';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
 import { userActions } from './user.actions';
 import { UserApiService } from './services/user.api.service';
-import { UserFacadeService } from './services/user.facade.service';
-import { AppNavigationService } from 'src/app/services/app-navigation.service';
 
 export const initUserEffect = createEffect(
 	() => {
@@ -16,25 +14,16 @@ export const initUserEffect = createEffect(
 );
 
 export const getUserEffect = createEffect(
-	(
-		actions$ = inject(Actions),
-		userApiService = inject(UserApiService),
-		userFacadeService = inject(UserFacadeService),
-		appNavigationService = inject(AppNavigationService),
-	) => {
+	(actions$ = inject(Actions), userApiService = inject(UserApiService)) => {
 		return actions$.pipe(
 			ofType(userActions.getUser),
 			exhaustMap(() =>
-				userApiService.authChanges$.pipe(
-					withLatestFrom(userFacadeService.user$),
-					map(([user, previousUser]) => {
-						if (previousUser === null && user !== null) {
-							appNavigationService.navigateToHomePage();
-						} else if (previousUser !== null && user === null) {
-							appNavigationService.navigateToAuthPage();
-						}
-						return userActions.getUserSuccess({ user });
-					}),
+				userApiService.session$.pipe(
+					map(({ data, error }) =>
+						error === null
+							? userActions.getUserSuccess({ user: data.session?.user ?? null })
+							: userActions.getUserFailure({ error }),
+					),
 					catchError((error: unknown) => of(userActions.getUserFailure({ error }))),
 				),
 			),
@@ -42,52 +31,129 @@ export const getUserEffect = createEffect(
 	},
 	{ functional: true },
 );
+// 	(
+// 		actions$ = inject(Actions),
+// 		userApiService = inject(UserApiService),
+// 		appNavigationService = inject(AppNavigationService),
+// 	) => {
+// 		return actions$.pipe(
+// 			ofType(userActions.getUser),
+// 			exhaustMap(() =>
+// 				userApiService.authChanges$.pipe(
+// 					tap(({ event }) => {
+// 						console.log('event', event);
+// 						switch (event) {
+// 							case 'PASSWORD_RECOVERY':
+// 								appNavigationService.navigateToChangePasswordPage();
+// 								break;
+// 							case 'SIGNED_IN':
+// 								appNavigationService.navigateToHomePage();
+// 								break;
+// 							case 'SIGNED_OUT':
+// 								appNavigationService.navigateToAuthPage();
+// 								break;
+// 						}
+// 					}),
+// 					map(({ session }) =>
+// 						userActions.getUserSuccess({ user: session?.user ?? null }),
+// 					),
+// 					catchError((error: unknown) => of(userActions.getUserFailure({ error }))),
+// 				),
+// 			),
+// 		);
+// 	},
+// 	{ functional: true },
+// );
 
 export const signUpUserEffect = createEffect(
 	(actions$ = inject(Actions), userApiService = inject(UserApiService)) => {
 		return actions$.pipe(
 			ofType(userActions.signUp),
-			tap((credentials) => {
-				userApiService.signUp(credentials);
-			}),
+			exhaustMap((credentials) =>
+				userApiService.signUp(credentials).pipe(
+					map(({ data, error }) =>
+						error === null
+							? userActions.signUpSuccess(data)
+							: userActions.signUpFailure({ error }),
+					),
+					catchError((error: unknown) => of(userActions.signUpFailure({ error }))),
+				),
+			),
 		);
 	},
-	{ functional: true, dispatch: false },
+	{ functional: true },
 );
 
 export const signInUserEffect = createEffect(
 	(actions$ = inject(Actions), userApiService = inject(UserApiService)) => {
 		return actions$.pipe(
 			ofType(userActions.signIn),
-			tap((credentials) => {
-				userApiService.signIn(credentials);
-			}),
+			exhaustMap((credentials) =>
+				userApiService.signIn(credentials).pipe(
+					map(({ data, error }) =>
+						error === null
+							? userActions.signInSuccess(data)
+							: userActions.signInFailure({ error }),
+					),
+					catchError((error: unknown) => of(userActions.signInFailure({ error }))),
+				),
+			),
 		);
 	},
-	{ functional: true, dispatch: false },
+	{ functional: true },
 );
 
 export const signOutUserEffect = createEffect(
 	(actions$ = inject(Actions), userApiService = inject(UserApiService)) => {
 		return actions$.pipe(
 			ofType(userActions.signOut),
-			tap(() => {
-				userApiService.signOut();
-			}),
+			exhaustMap(() =>
+				userApiService.signOut().pipe(
+					map(({ error }) =>
+						error === null
+							? userActions.signOutSuccess()
+							: userActions.signOutFailure({ error }),
+					),
+					catchError((error: unknown) => of(userActions.signOutFailure({ error }))),
+				),
+			),
 		);
 	},
-	{ functional: true, dispatch: false },
+	{ functional: true },
 );
 
-export const getUserProfileEffect = createEffect(
+export const resetPasswordEffect = createEffect(
 	(actions$ = inject(Actions), userApiService = inject(UserApiService)) => {
 		return actions$.pipe(
-			ofType(userActions.getUserProfile),
-			exhaustMap(({ user }) =>
-				userApiService.getProfile(user).pipe(
-					map((userProfile) => userActions.getUserProfileSuccess({ userProfile })),
+			ofType(userActions.resetPassword),
+			exhaustMap(({ email }) =>
+				userApiService.resetPassword(email).pipe(
+					map(({ error }) =>
+						error === null
+							? userActions.resetPasswordSuccess()
+							: userActions.resetPasswordFailure({ error }),
+					),
+					catchError((error: unknown) => of(userActions.resetPasswordFailure({ error }))),
+				),
+			),
+		);
+	},
+	{ functional: true },
+);
+
+export const changePasswordEffect = createEffect(
+	(actions$ = inject(Actions), userApiService = inject(UserApiService)) => {
+		return actions$.pipe(
+			ofType(userActions.changePassword),
+			exhaustMap(({ newPassword }) =>
+				userApiService.changePassword(newPassword).pipe(
+					map(({ data, error }) =>
+						error === null
+							? userActions.changePasswordSuccess(data)
+							: userActions.changePasswordFailure({ error }),
+					),
 					catchError((error: unknown) =>
-						of(userActions.getUserProfileFailure({ error })),
+						of(userActions.changePasswordFailure({ error })),
 					),
 				),
 			),

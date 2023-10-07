@@ -1,54 +1,50 @@
 import { Injectable, inject } from '@angular/core';
 
-import { Subject, from, map } from 'rxjs';
+import { from } from 'rxjs';
 import {
 	AuthChangeEvent,
-	PostgrestSingleResponse,
-	Session,
 	SignInWithPasswordCredentials,
-	SignUpWithPasswordCredentials,
 	SupabaseClient,
-	User,
 } from '@supabase/supabase-js';
 
-import { UserProfile } from '../types/user-profile.interface';
-import { UserFacadeService } from './user.facade.service';
-
-const getResponseData = <T>(response: PostgrestSingleResponse<T>) => {
-	if (response.error) {
-		throw new Error(response.error.message);
-	}
-	if (response.data === null) {
-		throw new Error('Failed to fetch data');
-	}
-	return response.data;
-};
+import { AppNavigationService } from 'src/app/shared/services/app-navigation.service';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class UserApiService {
 	private supabase = inject(SupabaseClient);
-	private userFacadeService = inject(UserFacadeService);
+	private appNavigationService = inject(AppNavigationService);
 
-	get user$() {
-		return from(this.supabase.auth.getUser());
+	constructor() {
+		this.supabase.auth.onAuthStateChange((event: AuthChangeEvent) => {
+			switch (event) {
+				case 'PASSWORD_RECOVERY':
+					this.appNavigationService.navigateToChangePasswordPage();
+					break;
+				case 'SIGNED_IN':
+					this.appNavigationService.navigateToHomePage();
+					break;
+				case 'SIGNED_OUT':
+					this.appNavigationService.navigateToAuthPage();
+					break;
+			}
+		});
 	}
 
 	get session$() {
 		return from(this.supabase.auth.getSession());
 	}
 
-	get authChanges$() {
-		const isLoggedIn$ = new Subject<User | null>();
-		this.supabase.auth.onAuthStateChange((event: AuthChangeEvent, session: Session | null) => {
-			isLoggedIn$.next(session?.user ?? null);
-		});
-		return isLoggedIn$;
-	}
-
-	signUp(credentials: SignUpWithPasswordCredentials) {
-		return from(this.supabase.auth.signUp(credentials));
+	signUp(credentials: { email: string; password: string }) {
+		return from(
+			this.supabase.auth.signUp({
+				...credentials,
+				options: {
+					emailRedirectTo: this.appNavigationService.currentAppOriginUrl,
+				},
+			}),
+		);
 	}
 
 	signIn(credentials: SignInWithPasswordCredentials) {
@@ -59,31 +55,43 @@ export class UserApiService {
 		return from(this.supabase.auth.signOut());
 	}
 
-	getProfile(user: User) {
+	resetPassword(email: string) {
 		return from(
-			this.supabase
-				.from('profiles')
-				.select(`username, website, avatar_url`)
-				.eq('id', user.id)
-				.single<UserProfile>(),
-		).pipe(map(getResponseData));
+			this.supabase.auth.resetPasswordForEmail(email, {
+				redirectTo: this.appNavigationService.currentAppOriginUrl,
+			}),
+		);
 	}
 
-	updateProfile(userProfile: UserProfile) {
-		const update = {
-			...userProfile,
-			id: userProfile.id,
-			updated_at: new Date(),
-		};
-
-		return from(this.supabase.from('profiles').upsert(update)).pipe(map(getResponseData));
+	changePassword(password: string) {
+		return from(this.supabase.auth.updateUser({ password }));
 	}
 
-	downLoadImage(path: string) {
-		return from(this.supabase.storage.from('avatars').download(path));
-	}
+	// getProfile(user: User) {
+	// 	return from(
+	// 		this.supabase
+	// 			.from('profiles')
+	// 			.select(`username, website, avatar_url`)
+	// 			.eq('id', user.id)
+	// 			.single<UserProfile>(),
+	// 	).pipe(map(getResponseData));
+	// }
 
-	uploadAvatar(filePath: string, file: File) {
-		return from(this.supabase.storage.from('avatars').upload(filePath, file));
-	}
+	// updateProfile(userProfile: UserProfile) {
+	// 	const update = {
+	// 		...userProfile,
+	// 		id: userProfile.id,
+	// 		updated_at: new Date(),
+	// 	};
+
+	// 	return from(this.supabase.from('profiles').upsert(update)).pipe(map(getResponseData));
+	// }
+
+	// downLoadImage(path: string) {
+	// 	return from(this.supabase.storage.from('avatars').download(path));
+	// }
+
+	// uploadAvatar(filePath: string, file: File) {
+	// 	return from(this.supabase.storage.from('avatars').upload(filePath, file));
+	// }
 }

@@ -1,22 +1,17 @@
 import { isDevMode } from '@angular/core';
 
-// import { User } from '@angular/fire/auth';
-
 import { createFeature, createReducer, MetaReducer, on } from '@ngrx/store';
+import { User } from '@supabase/supabase-js';
 
 import { userActions } from './user.actions';
-import { UserProfile } from './types/user-profile.interface';
-import { User } from '@supabase/supabase-js';
 
 export interface State {
 	user: User | null;
-	userProfile: UserProfile | null;
 	isLoading: boolean;
 }
 
 const initialState: State = {
 	user: null,
-	userProfile: null,
 	isLoading: false,
 };
 
@@ -27,28 +22,34 @@ export const userFeature = createFeature({
 	reducer: createReducer(
 		initialState,
 		on(
+			userActions.getUser,
 			userActions.signUp,
 			userActions.signIn,
 			userActions.signOut,
-			userActions.getUser,
-			userActions.getUserProfile,
-			userActions.updateUserProfile,
+			userActions.resetPassword,
+			userActions.changePassword,
 			(state: State): State => ({ ...state, isLoading: true }),
 		),
 		on(
 			userActions.getUserFailure,
-			userActions.getUserProfileFailure,
-			userActions.updateUserProfileFailure,
+			userActions.signUpFailure,
+			userActions.signInFailure,
+			userActions.signOutFailure,
+			userActions.resetPasswordSuccess,
+			userActions.resetPasswordFailure,
+			userActions.changePasswordFailure,
 			(state: State): State => ({ ...state, isLoading: false }),
 		),
 		on(
 			userActions.getUserSuccess,
+			userActions.signUpSuccess,
+			userActions.signInSuccess,
+			userActions.changePasswordSuccess,
 			(state, { user }): State => ({ ...state, user, isLoading: false }),
 		),
 		on(
-			userActions.getUserProfileSuccess,
-			userActions.updateUserProfileSuccess,
-			(state, { userProfile }): State => ({ ...state, userProfile }),
+			userActions.signOutSuccess,
+			(state): State => ({ ...state, user: null, isLoading: false }),
 		),
 	),
 });
@@ -59,5 +60,4 @@ export const {
 	selectUserState,
 	selectUser,
 	selectIsLoading,
-	selectUserProfile,
 } = userFeature;
