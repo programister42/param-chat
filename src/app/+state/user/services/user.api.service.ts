@@ -16,6 +16,7 @@ export class UserApiService {
 	private supabase = inject(SupabaseClient);
 	private appNavigationService = inject(AppNavigationService);
 
+	// TODO: Remove this constructor
 	constructor() {
 		this.supabase.auth.onAuthStateChange((event: AuthChangeEvent) => {
 			switch (event) {

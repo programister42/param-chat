@@ -31,39 +31,6 @@ export const getUserEffect = createEffect(
 	},
 	{ functional: true },
 );
-// 	(
-// 		actions$ = inject(Actions),
-// 		userApiService = inject(UserApiService),
-// 		appNavigationService = inject(AppNavigationService),
-// 	) => {
-// 		return actions$.pipe(
-// 			ofType(userActions.getUser),
-// 			exhaustMap(() =>
-// 				userApiService.authChanges$.pipe(
-// 					tap(({ event }) => {
-// 						console.log('event', event);
-// 						switch (event) {
-// 							case 'PASSWORD_RECOVERY':
-// 								appNavigationService.navigateToChangePasswordPage();
-// 								break;
-// 							case 'SIGNED_IN':
-// 								appNavigationService.navigateToHomePage();
-// 								break;
-// 							case 'SIGNED_OUT':
-// 								appNavigationService.navigateToAuthPage();
-// 								break;
-// 						}
-// 					}),
-// 					map(({ session }) =>
-// 						userActions.getUserSuccess({ user: session?.user ?? null }),
-// 					),
-// 					catchError((error: unknown) => of(userActions.getUserFailure({ error }))),
-// 				),
-// 			),
-// 		);
-// 	},
-// 	{ functional: true },
-// );
 
 export const signUpUserEffect = createEffect(
 	(actions$ = inject(Actions), userApiService = inject(UserApiService)) => {
