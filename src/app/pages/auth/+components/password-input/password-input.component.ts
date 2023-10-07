@@ -22,7 +22,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { InvalidPopoverDirective } from '../../+directives/invalid-popover.directive';
 
-type UnknownCallback = (_: unknown) => void;
+// eslint-disable-next-line @typescript-eslint/ban-types
+type UnknownCallback = Function;
 
 @Component({
 	selector: 'param-password-input',
@@ -66,6 +67,8 @@ export class PasswordInputComponent implements ControlValueAccessor, Validator, 
 		passwordConfirmation: [''],
 	});
 
+	touched = false;
+
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	onChange: UnknownCallback = () => {};
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -87,13 +90,7 @@ export class PasswordInputComponent implements ControlValueAccessor, Validator, 
 
 	writeValue(password: string) {
 		if (password) {
-			this.passwordConfirmationForm.setValue(
-				{
-					password,
-					passwordConfirmation: password,
-				},
-				// { emitEvent: false },
-			);
+			this.passwordConfirmationForm.get('password')?.setValue(password);
 		}
 	}
 
@@ -125,7 +122,12 @@ export class PasswordInputComponent implements ControlValueAccessor, Validator, 
 		};
 	}
 
-	validate(control: typeof this.passwordConfirmationForm): ValidationErrors | null {
-		return this.passwordConfirmationForm.valid ? null : control.errors;
+	validate(): ValidationErrors | null {
+		return this.passwordConfirmationForm.valid
+			? null
+			: {
+					...this.passwordConfirmationForm.get('password')?.errors,
+					...this.passwordConfirmationForm.get('passwordConfirmation')?.errors,
+			  };
 	}
 }
