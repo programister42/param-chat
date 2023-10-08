@@ -78,12 +78,12 @@ export class PasswordInputComponent implements ControlValueAccessor, Validator, 
 		if (this.isConfirmationRequired) {
 			this.passwordConfirmationForm
 				.get('passwordConfirmation')
-				?.setValidators([this.getPasswordsMustMatchValidator()]);
+				// eslint-disable-next-line @typescript-eslint/unbound-method
+				?.setValidators([Validators.required, this.getPasswordsMustMatchValidator()]);
 		}
-		this.passwordConfirmationForm
-			.get('password')
-			?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
-			.subscribe((password) => {
+		this.passwordConfirmationForm.valueChanges
+			.pipe(takeUntilDestroyed(this.destroyRef))
+			.subscribe(({ password }) => {
 				this.onChange(password);
 			});
 	}
@@ -126,8 +126,9 @@ export class PasswordInputComponent implements ControlValueAccessor, Validator, 
 		return this.passwordConfirmationForm.valid
 			? null
 			: {
-					...this.passwordConfirmationForm.get('password')?.errors,
-					...this.passwordConfirmationForm.get('passwordConfirmation')?.errors,
+					password: this.passwordConfirmationForm.get('password')?.errors,
+					passwordConfirmation:
+						this.passwordConfirmationForm.get('passwordConfirmation')?.errors,
 			  };
 	}
 }
