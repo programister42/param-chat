@@ -1,11 +1,5 @@
 export const environment = {
-	firebase: {
-		projectId: 'param-chat-2',
-		appId: '1:1058836025056:web:e81b812214a839ca8f8a85',
-		storageBucket: 'param-chat-2.appspot.com',
-		apiKey: 'AIzaSyB4h0QkHVYhs94VHvZwgY0z1dUx59TSaUY',
-		authDomain: 'param-chat-2.firebaseapp.com',
-		messagingSenderId: '1058836025056',
-		measurementId: 'G-PHYFN96B9G',
-	},
+	supabaseUrl: 'https://auaiamyjmzwczjrgwwwm.supabase.co',
+	supabaseKey:
+		'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF1YWlhbXlqbXp3Y3pqcmd3d3dtIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTUzMDk2MzYsImV4cCI6MjAxMDg4NTYzNn0.QnPAqDGZpSIgFKFIZG3-KrgIxfvZqwC3cQkpISHtygw',
 };

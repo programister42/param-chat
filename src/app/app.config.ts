@@ -1,29 +1,17 @@
-import { ApplicationConfig, importProvidersFrom, isDevMode } from '@angular/core';
+import { ApplicationConfig, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
-
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import {
-	provideAnalytics,
-	getAnalytics,
-	ScreenTrackingService,
-	UserTrackingService,
-} from '@angular/fire/analytics';
-import { provideAuth, getAuth } from '@angular/fire/auth';
-import { provideDatabase, getDatabase } from '@angular/fire/database';
-import { provideFirestore, getFirestore } from '@angular/fire/firestore';
-import { provideFunctions, getFunctions } from '@angular/fire/functions';
-import { provideMessaging, getMessaging } from '@angular/fire/messaging';
-import { providePerformance, getPerformance } from '@angular/fire/performance';
-import { provideRemoteConfig, getRemoteConfig } from '@angular/fire/remote-config';
-import { provideStorage, getStorage } from '@angular/fire/storage';
 
 import { provideState, provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideRouterStore } from '@ngrx/router-store';
+import { provideEffects } from '@ngrx/effects';
+import { SupabaseClient, createClient } from '@supabase/supabase-js';
 
 import { environment } from '../environments/environment';
 import { routes } from './app.routes';
 import { userFeature } from './+state/user/user.reducer';
+import * as userEffects from './+state/user/user.effects';
+import { IMAGE_LOADER, ImageLoaderConfig } from '@angular/common';
 
 export const appConfig: ApplicationConfig = {
 	providers: [
@@ -32,19 +20,21 @@ export const appConfig: ApplicationConfig = {
 		provideState(userFeature),
 		provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
 		provideRouterStore(),
-		importProvidersFrom([
-			provideFirebaseApp(() => initializeApp(environment.firebase)),
-			provideAnalytics(() => getAnalytics()),
-			provideAuth(() => getAuth()),
-			provideDatabase(() => getDatabase()),
-			provideFirestore(() => getFirestore()),
-			provideFunctions(() => getFunctions()),
-			provideMessaging(() => getMessaging()),
-			providePerformance(() => getPerformance()),
-			provideRemoteConfig(() => getRemoteConfig()),
-			provideStorage(() => getStorage()),
-		]),
-		ScreenTrackingService,
-		UserTrackingService,
+		provideEffects(userEffects),
+		{
+			provide: SupabaseClient,
+			useFactory: () => createClient(environment.supabaseUrl, environment.supabaseKey),
+		},
+		{
+			provide: IMAGE_LOADER,
+			useValue: ({ src, loaderParams }: ImageLoaderConfig) => {
+				const imgExt = src.split('.').pop();
+				const resultSrc =
+					src.replace(`.${imgExt}`, '') +
+					(loaderParams?.['darkVariant'] ? '-dark' : '') +
+					`.${imgExt}`;
+				return `${environment.supabaseUrl}/storage/v1/object/public/${resultSrc}`;
+			},
+		},
 	],
 };

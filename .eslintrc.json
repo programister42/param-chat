@@ -1,70 +1,60 @@
 {
-  "root": true,
-  "ignorePatterns": [
-    "projects/**/*"
-  ],
-  "overrides": [
-    {
-      "files": [
-        "*.ts"
-      ],
-      "extends": [
-        "eslint:recommended",
-        "plugin:@typescript-eslint/strict-type-checked",
-        "plugin:@typescript-eslint/stylistic-type-checked",
-        "plugin:@angular-eslint/all",
-        "plugin:@angular-eslint/template/process-inline-templates",
-        "plugin:rxjs/recommended",
-        "plugin:prettier/recommended"
-      ],
-      "parserOptions": {
-        "project": "tsconfig.json"
-      },
-      "rules": {
-        "@angular-eslint/directive-selector": [
-          "error",
-          {
-            "type": "attribute",
-            "prefix": "param",
-            "style": "camelCase"
-          }
-        ],
-        "@angular-eslint/component-selector": [
-          "error",
-          {
-            "type": "element",
-            "prefix": "param",
-            "style": "kebab-case"
-          }
-        ]
-      }
-    },
-    {
-      "files": [
-        "*.html"
-      ],
-      "extends": [
-        "plugin:@angular-eslint/template/all",
-        "plugin:@angular-eslint/template/accessibility",
-        "plugin:prettier/recommended"
-      ],
-      "rules": {
-        "prettier/prettier": [
-          "error",
-          {
-            "parser": "angular"
-          }
-        ],
-        "@angular-eslint/template/i18n": "off"
-      }
-    },
-    {
-      "files": [
-        "*.ts"
-      ],
-      "extends": [
-        "plugin:@ngrx/strict-requiring-type-checking"
-      ]
-    }
-  ]
+	"root": true,
+	"ignorePatterns": ["projects/**/*"],
+	"overrides": [
+		{
+			"files": ["*.ts"],
+			"extends": [
+				"eslint:recommended",
+				"plugin:@typescript-eslint/strict-type-checked",
+				"plugin:@typescript-eslint/stylistic-type-checked",
+				"plugin:@angular-eslint/all",
+				"plugin:@angular-eslint/template/process-inline-templates",
+				"plugin:rxjs/recommended",
+				"plugin:prettier/recommended"
+			],
+			"parserOptions": {
+				"project": "tsconfig.json"
+			},
+			"rules": {
+				"@angular-eslint/directive-selector": [
+					"error",
+					{
+						"type": "attribute",
+						"prefix": "param",
+						"style": "camelCase"
+					}
+				],
+				"@angular-eslint/component-selector": [
+					"error",
+					{
+						"type": "element",
+						"prefix": "param",
+						"style": "kebab-case"
+					}
+				]
+			}
+		},
+		{
+			"files": ["*.html"],
+			"extends": [
+				"plugin:@angular-eslint/template/all",
+				"plugin:@angular-eslint/template/accessibility",
+				"plugin:prettier/recommended"
+			],
+			"rules": {
+				"prettier/prettier": [
+					"error",
+					{
+						"parser": "angular"
+					}
+				],
+				"@angular-eslint/template/i18n": "off"
+			}
+		},
+		{
+			"files": ["*.ts"],
+			"extends": ["plugin:@ngrx/strict-requiring-type-checking"]
+		}
+	]
 }
