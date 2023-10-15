@@ -12,7 +12,7 @@ import { AppNavigationService } from 'src/app/shared/services/app-navigation.ser
 @Injectable({
 	providedIn: 'root',
 })
-export class UserApiService {
+export class AuthApiService {
 	private supabase = inject(SupabaseClient);
 	private appNavigationService = inject(AppNavigationService);
 
@@ -68,12 +68,12 @@ export class UserApiService {
 		return from(this.supabase.auth.updateUser({ password }));
 	}
 
-	// getProfile(user: User) {
+	// getProfile(auth: User) {
 	// 	return from(
 	// 		this.supabase
 	// 			.from('profiles')
 	// 			.select(`username, website, avatar_url`)
-	// 			.eq('id', user.id)
+	// 			.eq('id', auth.id)
 	// 			.single<UserProfile>(),
 	// 	).pipe(map(getResponseData));
 	// }

@@ -3,7 +3,7 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { UserFacadeService } from 'src/app/+state/user/services/user.facade.service';
+import { AuthFacadeService } from 'src/app/+state/auth/services/auth.facade.service';
 import { PasswordInputComponent } from '../+components/password-input/password-input.component';
 import { InvalidPopoverDirective } from '../+directives/invalid-popover.directive';
 
@@ -24,14 +24,12 @@ import { InvalidPopoverDirective } from '../+directives/invalid-popover.directiv
 })
 export class LoginComponent {
 	private formBuilder = inject(FormBuilder);
-	private userFacadeService = inject(UserFacadeService);
-
 	loginForm = this.formBuilder.nonNullable.group({
 		// eslint-disable-next-line @typescript-eslint/unbound-method
 		email: ['', [Validators.required, Validators.email]],
 		password: [''],
 	});
-
+	private userFacadeService = inject(AuthFacadeService);
 	isLoading$ = this.userFacadeService.isLoading$;
 
 	onSubmit(): void {

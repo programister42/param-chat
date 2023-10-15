@@ -11,8 +11,8 @@
 	>
 		<div>
 			<label
-				for="email"
 				class="block mb-2 text-sm font-medium"
+				for="email"
 				[ngClass]="
 					registerForm.get('email')?.dirty &&
 					registerForm.get('email')?.touched &&
@@ -23,12 +23,12 @@
 				>Your email</label
 			>
 			<input
-				type="email"
-				name="email"
-				id="email"
-				placeholder="name@company.com"
-				formControlName="email"
 				class="border sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700"
+				formControlName="email"
+				id="email"
+				name="email"
+				placeholder="name@company.com"
+				type="email"
 				[ngClass]="
 					registerForm.get('email')?.dirty &&
 					registerForm.get('email')?.touched &&
@@ -40,10 +40,10 @@
 			/>
 			<div
 				#emailInvalidPopover
+				class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800"
 				data-popover
 				id="popover-email-invalid"
 				role="tooltip"
-				class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800"
 			>
 				<div
 					class="px-3 py-2 bg-gray-100 border-b border-gray-200 rounded-t-lg dark:border-gray-600 dark:bg-gray-700"
@@ -60,50 +60,50 @@
 			</div>
 		</div>
 		<param-password-input
-			passwordLabel="Password"
-			passwordConfirmationLabel="Confirm password"
 			formControlName="password"
+			passwordConfirmationLabel="Confirm password"
+			passwordLabel="Password"
 			[isConfirmationRequired]="true"
 		/>
 		<div class="flex items-start">
 			<div class="flex items-center h-5">
 				<input
-					id="terms"
-					name="terms"
 					aria-describedby="terms"
-					type="checkbox"
 					class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
 					formControlName="terms"
+					id="terms"
+					name="terms"
+					type="checkbox"
 				/>
 			</div>
 			<div class="ml-3 text-sm">
 				<label
-					for="terms"
 					class="font-light text-gray-500 dark:text-gray-300"
+					for="terms"
 					>I accept the
 				</label>
 				<a
+					class="font-medium text-primary-600 cursor-pointer hover:underline dark:text-primary-500"
 					role="button"
 					tabindex="0"
-					class="font-medium text-primary-600 cursor-pointer hover:underline dark:text-primary-500"
 					(click)="onClickTermsLink()"
-					(keyup)="onClickTermsLink()"
+					(keydown)="onClickTermsLink()"
 					>Terms and Conditions</a
 				>
 			</div>
 		</div>
 		<button
-			type="submit"
 			class="w-full text-white bg-primary-600 disabled:bg-blue-400 hover:bg-primary-700 disabled:hover:bg-blue-400 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 disabled:dark:bg-blue-500 dark:hover:bg-primary-700 disabled:hover:dark:bg-blue-500 dark:focus:ring-primary-800 disabled:cursor-not-allowed"
+			type="submit"
 			[disabled]="registerForm.invalid || (isLoading$ | async)"
 		>
 			<svg
 				*ngIf="isLoading$ | async"
 				aria-hidden="true"
-				role="status"
 				class="inline w-4 h-4 mr-3 text-white animate-spin"
-				viewBox="0 0 100 101"
 				fill="none"
+				role="status"
+				viewBox="0 0 100 101"
 				xmlns="http://www.w3.org/2000/svg"
 			>
 				<path
@@ -130,10 +130,10 @@
 
 <!-- Terms and Conditions modal -->
 <div
-	id="termsModal"
-	tabindex="-1"
 	aria-hidden="true"
 	class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
+	id="termsModal"
+	tabindex="-1"
 >
 	<div class="relative w-full max-w-2xl max-h-full">
 		<!-- Modal content -->
@@ -146,23 +146,23 @@
 					Terms of Service
 				</h3>
 				<button
-					type="button"
 					class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+					type="button"
 					(click)="onClickCloseTermsButton()"
 				>
 					<svg
-						class="w-3 h-3"
 						aria-hidden="true"
-						xmlns="http://www.w3.org/2000/svg"
+						class="w-3 h-3"
 						fill="none"
 						viewBox="0 0 14 14"
+						xmlns="http://www.w3.org/2000/svg"
 					>
 						<path
+							d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
 							stroke="currentColor"
 							stroke-linecap="round"
 							stroke-linejoin="round"
 							stroke-width="2"
-							d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
 						/>
 					</svg>
 					<span class="sr-only">Close modal</span>
@@ -209,15 +209,15 @@
 				class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600"
 			>
 				<button
-					type="button"
 					class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+					type="button"
 					(click)="onClickAcceptTermsButton()"
 				>
 					I accept
 				</button>
 				<button
-					type="button"
 					class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+					type="button"
 					(click)="onClickCloseTermsButton()"
 				>
 					Decline
@@ -228,19 +228,19 @@
 </div>
 
 <div
+	class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
 	id="confirmationEmailModal"
 	tabindex="-1"
-	class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
 >
 	<div class="relative w-full max-w-md max-h-full">
 		<div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
 			<div class="p-6 text-center">
 				<svg
-					class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200"
 					aria-hidden="true"
-					xmlns="http://www.w3.org/2000/svg"
+					class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200"
 					fill="currentColor"
 					viewBox="0 0 20 20"
+					xmlns="http://www.w3.org/2000/svg"
 				>
 					<path
 						d="m17.418 3.623-.018-.008a6.713 6.713 0 0 0-2.4-.569V2h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2H9.89A6.977 6.977 0 0 1 12 8v5h-2V8A5 5 0 1 0 0 8v6a1 1 0 0 0 1 1h8v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4h6a1 1 0 0 0 1-1V8a5 5 0 0 0-2.582-4.377ZM6 12H4a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Z"

@@ -3,7 +3,7 @@ import { isDevMode } from '@angular/core';
 import { createFeature, createReducer, MetaReducer, on } from '@ngrx/store';
 import { User } from '@supabase/supabase-js';
 
-import { userActions } from './user.actions';
+import { authActions } from './auth.actions';
 
 export interface State {
 	user: User | null;
@@ -17,38 +17,38 @@ const initialState: State = {
 
 export const metaReducers: MetaReducer<State>[] = isDevMode() ? [] : [];
 
-export const userFeature = createFeature({
-	name: 'user',
+export const authFeature = createFeature({
+	name: 'Auth',
 	reducer: createReducer(
 		initialState,
 		on(
-			userActions.getUser,
-			userActions.signUp,
-			userActions.signIn,
-			userActions.signOut,
-			userActions.resetPassword,
-			userActions.changePassword,
+			authActions.getUser,
+			authActions.signUp,
+			authActions.signIn,
+			authActions.signOut,
+			authActions.resetPassword,
+			authActions.changePassword,
 			(state: State): State => ({ ...state, isLoading: true }),
 		),
 		on(
-			userActions.getUserFailure,
-			userActions.signUpFailure,
-			userActions.signInFailure,
-			userActions.signOutFailure,
-			userActions.resetPasswordSuccess,
-			userActions.resetPasswordFailure,
-			userActions.changePasswordFailure,
+			authActions.getUserFailure,
+			authActions.signUpFailure,
+			authActions.signInFailure,
+			authActions.signOutFailure,
+			authActions.resetPasswordSuccess,
+			authActions.resetPasswordFailure,
+			authActions.changePasswordFailure,
 			(state: State): State => ({ ...state, isLoading: false }),
 		),
 		on(
-			userActions.getUserSuccess,
-			userActions.signUpSuccess,
-			userActions.signInSuccess,
-			userActions.changePasswordSuccess,
+			authActions.getUserSuccess,
+			authActions.signUpSuccess,
+			authActions.signInSuccess,
+			authActions.changePasswordSuccess,
 			(state, { user }): State => ({ ...state, user, isLoading: false }),
 		),
 		on(
-			userActions.signOutSuccess,
+			authActions.signOutSuccess,
 			(state): State => ({ ...state, user: null, isLoading: false }),
 		),
 	),
@@ -57,7 +57,7 @@ export const userFeature = createFeature({
 export const {
 	name: userFeatureName,
 	reducer: userReducer,
-	selectUserState,
+	selectAuthState,
 	selectUser,
 	selectIsLoading,
-} = userFeature;
+} = authFeature;

@@ -1,26 +1,32 @@
 import { ApplicationConfig, isDevMode } from '@angular/core';
+import { IMAGE_LOADER, ImageLoaderConfig } from '@angular/common';
 import { provideRouter } from '@angular/router';
 
 import { provideState, provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
-import { provideRouterStore } from '@ngrx/router-store';
+import { NavigationActionTiming, provideRouterStore } from '@ngrx/router-store';
 import { provideEffects } from '@ngrx/effects';
-import { SupabaseClient, createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 import { environment } from '../environments/environment';
 import { routes } from './app.routes';
-import { userFeature } from './+state/user/user.reducer';
-import * as userEffects from './+state/user/user.effects';
-import { IMAGE_LOADER, ImageLoaderConfig } from '@angular/common';
+import { authFeature } from './+state/auth/auth.reducer';
+import * as userEffects from './+state/auth/auth.effects';
+import * as homeEffects from './pages/home/+state/home.effects';
 
 export const appConfig: ApplicationConfig = {
 	providers: [
 		provideRouter(routes),
 		provideStore(),
-		provideState(userFeature),
-		provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
-		provideRouterStore(),
-		provideEffects(userEffects),
+		provideState(authFeature),
+		provideStoreDevtools({
+			maxAge: 25,
+			logOnly: !isDevMode(),
+		}),
+		provideRouterStore({
+			navigationActionTiming: NavigationActionTiming.PostActivation,
+		}),
+		provideEffects([userEffects, homeEffects]),
 		{
 			provide: SupabaseClient,
 			useFactory: () => createClient(environment.supabaseUrl, environment.supabaseKey),

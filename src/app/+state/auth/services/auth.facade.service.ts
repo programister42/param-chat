@@ -4,13 +4,13 @@ import { Store } from '@ngrx/store';
 import { Observable, filter, map } from 'rxjs';
 import { User } from '@supabase/supabase-js';
 
-import { selectIsLoading, selectUser, selectUserState } from '../user.reducer';
-import { userActions } from '../user.actions';
+import { selectIsLoading, selectUser, selectAuthState } from '../auth.reducer';
+import { authActions } from '../auth.actions';
 
 @Injectable({
 	providedIn: 'root',
 })
-export class UserFacadeService {
+export class AuthFacadeService {
 	private store = inject(Store);
 
 	get user$(): Observable<User | null> {
@@ -18,7 +18,7 @@ export class UserFacadeService {
 	}
 
 	get isAuthenticated$(): Observable<boolean> {
-		return this.store.select(selectUserState).pipe(
+		return this.store.select(selectAuthState).pipe(
 			filter(({ isLoading }) => !isLoading),
 			// eslint-disable-next-line @ngrx/avoid-mapping-selectors
 			map(({ user }) => user !== null),
@@ -30,22 +30,22 @@ export class UserFacadeService {
 	}
 
 	signUp(credentials: { email: string; password: string }): void {
-		this.store.dispatch(userActions.signUp(credentials));
+		this.store.dispatch(authActions.signUp(credentials));
 	}
 
 	signIn(credentials: { email: string; password: string }): void {
-		this.store.dispatch(userActions.signIn(credentials));
+		this.store.dispatch(authActions.signIn(credentials));
 	}
 
 	signOut(): void {
-		this.store.dispatch(userActions.signOut());
+		this.store.dispatch(authActions.signOut());
 	}
 
 	resetPassword(email: string): void {
-		this.store.dispatch(userActions.resetPassword({ email }));
+		this.store.dispatch(authActions.resetPassword({ email }));
 	}
 
 	changePassword(newPassword: string): void {
-		this.store.dispatch(userActions.changePassword({ newPassword }));
+		this.store.dispatch(authActions.changePassword({ newPassword }));
 	}
 }

@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { UserFacadeService } from 'src/app/+state/user/services/user.facade.service';
+import { AuthFacadeService } from 'src/app/+state/auth/services/auth.facade.service';
 import { AppNavigationService } from 'src/app/shared/services/app-navigation.service';
 import { PasswordInputComponent } from '../+components/password-input/password-input.component';
 
@@ -24,15 +24,13 @@ import { PasswordInputComponent } from '../+components/password-input/password-i
 })
 export class ChangePasswordComponent {
 	private formBuilder = inject(FormBuilder);
-	private destroyRef = inject(DestroyRef);
-	private userFacadeService = inject(UserFacadeService);
-	private appNavigationService = inject(AppNavigationService);
-
 	changePasswordForm = this.formBuilder.nonNullable.group({
 		password: [''],
 	});
-
+	private destroyRef = inject(DestroyRef);
+	private userFacadeService = inject(AuthFacadeService);
 	isLoading$ = this.userFacadeService.isLoading$;
+	private appNavigationService = inject(AppNavigationService);
 
 	onSubmit(): void {
 		this.userFacadeService.changePassword(this.changePasswordForm.controls.password.value);

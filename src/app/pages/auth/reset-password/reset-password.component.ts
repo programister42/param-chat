@@ -11,7 +11,7 @@ import { RouterModule } from '@angular/router';
 
 import { Modal, ModalInterface, ModalOptions } from 'flowbite';
 
-import { UserFacadeService } from 'src/app/+state/user/services/user.facade.service';
+import { AuthFacadeService } from 'src/app/+state/auth/services/auth.facade.service';
 import { PasswordInputComponent } from '../+components/password-input/password-input.component';
 import { InvalidPopoverDirective } from '../+directives/invalid-popover.directive';
 
@@ -32,8 +32,6 @@ import { InvalidPopoverDirective } from '../+directives/invalid-popover.directiv
 })
 export class ResetPasswordComponent implements OnDestroy {
 	private formBuilder = inject(FormBuilder);
-	private userFacadeService = inject(UserFacadeService);
-
 	resetPasswordForm = this.formBuilder.nonNullable.group({
 		email: [
 			'',
@@ -45,7 +43,7 @@ export class ResetPasswordComponent implements OnDestroy {
 			],
 		],
 	});
-
+	private userFacadeService = inject(AuthFacadeService);
 	isLoading$ = this.userFacadeService.isLoading$;
 
 	private confirmationEmailModal: ModalInterface | undefined;

@@ -2,8 +2,8 @@ import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
 import { User } from '@supabase/supabase-js';
 
-export const userActions = createActionGroup({
-	source: 'User',
+export const authActions = createActionGroup({
+	source: 'Auth',
 	events: {
 		getUser: emptyProps(),
 		getUserSuccess: props<{ user: User | null }>(),
